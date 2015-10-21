@@ -6,16 +6,19 @@
 C_SRCS += \
 ../src/ballctrl.c \
 ../src/paddlectrl.c \
+../src/pause.c \
 ../src/pong.c 
 
 OBJS += \
 ./src/ballctrl.o \
 ./src/paddlectrl.o \
+./src/pause.o \
 ./src/pong.o 
 
 C_DEPS += \
 ./src/ballctrl.d \
 ./src/paddlectrl.d \
+./src/pause.d \
 ./src/pong.d 
 
 
