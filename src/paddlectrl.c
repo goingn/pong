@@ -41,13 +41,11 @@ static void undrawPaddle(int center);
  *                                the paddle.
  * Function return value: None
  ************************************************************************************/
-static void drawPaddle(int center)
-{
+static void drawPaddle(int center) {
 	int i;
 
-	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++)
-	{
-		move(i,0);
+	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
+		move(i, 0);
 		addch('|');
 	}
 }
@@ -61,13 +59,11 @@ static void drawPaddle(int center)
  *                                the paddle.
  * Function return value: None
  ************************************************************************************/
-static void undrawPaddle(int center)
-{
+static void undrawPaddle(int center) {
 	int i;
 
-	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++)
-	{
-		move(i,0);
+	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
+		move(i, 0);
 		addch(' ');
 	}
 }
@@ -97,33 +93,38 @@ void *moveme(void* vp) {
 	// draw the default paddle
 	drawPaddle(vpos);
 
-
 	while (!quit) {
 		noecho();
 		ch = getch();
 		switch (ch) {
 
-
 		case KEY_UP: // The user has pressed the up arrow.  Move the paddle one pixel upwards if possible.
-			undrawPaddle(vpos);
-			vpos--;
-			if (vpos < 0+PADDLE_SIZE / 2) {
-				vpos = PADDLE_SIZE / 2;
+			if (!pauseGame) {
+				undrawPaddle(vpos);
+				vpos--;
+				if (vpos < 0 + PADDLE_SIZE / 2) {
+					vpos = PADDLE_SIZE / 2;
+				}
+				drawPaddle(vpos);
 			}
-			drawPaddle(vpos);
 			break;
 
 		case KEY_DOWN: // The user has pressed the down arrow.  Move the paddle one pixel downward if possible.
-			undrawPaddle(vpos);
-			vpos++;
-			if (vpos > (maxy - (PADDLE_SIZE / 2))) {
-				vpos = (maxy - (PADDLE_SIZE / 2));
+			if (!pauseGame) {
+				undrawPaddle(vpos);
+				vpos++;
+				if (vpos > (maxy - (PADDLE_SIZE / 2))) {
+					vpos = (maxy - (PADDLE_SIZE / 2));
+				}
+				drawPaddle(vpos);
 			}
-			drawPaddle(vpos);
 			break;
 
 		case 'q': // The user has pressed the quiz button.  Exit the game.
 			quit = true;
+			break;
+		case 'p':
+			pauseGame = !pauseGame;
 			break;
 		default:
 			break;

@@ -23,8 +23,9 @@
 #include "pong.h"
 #include "paddlectrl.h"
 #include "ballctrl.h"
+#include "timer.h"
 
-#define THREAD_COUNT (2)
+#define THREAD_COUNT (3)
 
 /************************************************************************************
  * Method header:
@@ -48,6 +49,7 @@ int main(int argc, char* argv[]) {
 	// Initialize all of the variables.
 	// Global data - for inter-thread communication
 	quit = false;
+	pauseGame = false;
 
 	// init window - see curses documentation for guidance
 	win = initscr();
@@ -64,6 +66,9 @@ int main(int argc, char* argv[]) {
 	}
 	if ((rc2 = pthread_create(&threads[1], NULL, &moveme, NULL))) {
 		fprintf(stderr, "Player thread creation failed");
+	}
+	if ((rc3 = pthread_create(&threads[2], NULL, &timer, NULL))) {
+		fprintf(stderr, "Timer thread creation failed");
 	}
 
 	// Wait for the threads to exit

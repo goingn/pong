@@ -1,14 +1,14 @@
 /************************************************************************************
-* This file was developed as part of CS3841 Design of Operating Systems at the 
-* Milwaukee School of Engineering.  This file is copyright 2008-2015 by MSOE.
-* 
-* $Author: wws $
-* $Revision: 1.1 $
-* $Name:  $
-* This file servers as the interface header definition for the ball controller logic of the 
-* pong game.
-*
-************************************************************************************/
+ * This file was developed as part of CS3841 Design of Operating Systems at the
+ * Milwaukee School of Engineering.  This file is copyright 2008-2015 by MSOE.
+ *
+ * $Author: wws $
+ * $Revision: 1.1 $
+ * $Name:  $
+ * This file servers as the interface header definition for the ball controller logic of the
+ * pong game.
+ *
+ ************************************************************************************/
 #ifndef BALLCTRL_H
 #define BALLCTRL_H
 
@@ -26,7 +26,6 @@
  * Public structure / type definitions
  ************************************************************************************/
 // None as of right now.
-
 /************************************************************************************
  * Public function / method prototypes
  ************************************************************************************/

@@ -19,7 +19,6 @@
 #include "ballctrl.h"
 #include "pong.h"
 
-
 /************************************************************************************
  * Private structure / type definitions
  ************************************************************************************/
@@ -32,6 +31,9 @@ static void collision();
 /************************************************************************************
  * Constant declarations / table declarations
  ***********************************************************************************/
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 static int ballx;
 static int bally;
 static float ballAngle;
@@ -61,55 +63,55 @@ void *moveball(void* vp) {
 	// +/- 45 degrees
 	float yadder = 1.0f;
 	float xadder = 1.0f;
-	float xactual = maxx/2.0f;
-	float yactual = maxy/2.0f;
+	float xactual = maxx / 2.0f;
+	float yactual = maxy / 2.0f;
 	ballAngle = 315;
 
 	while (!quit) {
-		move(bally, ballx);
-		addch(' ');
+		if (!pauseGame) {
+			move(bally, ballx);
+			addch(' ');
 
-		// Figure out the movement
-		float angleInRadians = M_PI * ballAngle / 180.0;
-		float xmovement = cos(angleInRadians);
-		float ymovement = sin(angleInRadians);
+			// Figure out the movement
+			float angleInRadians = M_PI * ballAngle / 180.0;
+			float xmovement = cos(angleInRadians);
+			float ymovement = sin(angleInRadians);
 
+			yactual += ymovement;
+			xactual += xmovement;
 
-		yactual += ymovement;
-		xactual += xmovement;
+			// truncate
+			bally = (int) (yactual);
+			ballx = (int) (xactual);
+			if (bally >= maxy - 1) {
+				ballAngle = 360 - ballAngle;
+				collision();
+			}
+			if (bally < 1) {
+				ballAngle = 360 - ballAngle;
+				collision();
+			}
+			if (ballx >= maxx - 1) {
+				ballAngle = 180 - ballAngle;
+				collision();
+			}
+			if (ballx < 1) {
+				ballAngle = 180 - ballAngle;
+				collision();
+			}
 
-		// truncate
-		bally = (int) (yactual);
-		ballx = (int) (xactual);
-		if (bally >= maxy - 1) {
-			ballAngle = 360 - ballAngle;
-			collision();
+			ballAngle = fmod(ballAngle + 360, 360.0f);
+
+			move(bally, ballx);
+			addch('O');
+			touchwin(win);
+			refresh();
+
+			// Do not want ball to move too fast...
+			usleep(200000);
+			// HINT: This really should be a variable, thus allowing you to speed up or slow
+			//  down play to increase / decrease level of difficulty.
 		}
-		if (bally < 1) {
-			ballAngle = 360 - ballAngle;
-			collision();
-		}
-		if (ballx >= maxx - 1) {
-			ballAngle = 180 - ballAngle;
-			collision();
-		}
-		if (ballx < 1) {
-			ballAngle = 180 - ballAngle;
-			collision();
-		}
-
-		ballAngle = fmod(ballAngle+360,360.0f);
-
-		move(bally, ballx);
-		addch('O');
-		touchwin(win);
-		refresh();
-
-
-		// Do not want ball to move too fast...		
-		usleep(200000);
-		// HINT: This really should be a variable, thus allowing you to speed up or slow
-		//  down play to increase / decrease level of difficulty.
 	}
 	return NULL;
 }
