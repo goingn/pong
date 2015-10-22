@@ -7,18 +7,21 @@ C_SRCS += \
 ../src/ballctrl.c \
 ../src/paddlectrl.c \
 ../src/pong.c \
+../src/splash.c \
 ../src/timer.c 
 
 OBJS += \
 ./src/ballctrl.o \
 ./src/paddlectrl.o \
 ./src/pong.o \
+./src/splash.o \
 ./src/timer.o 
 
 C_DEPS += \
 ./src/ballctrl.d \
 ./src/paddlectrl.d \
 ./src/pong.d \
+./src/splash.d \
 ./src/timer.d 
 
 

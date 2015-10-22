@@ -45,8 +45,8 @@ static void drawPaddle(int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
-		move(i, 0);
-		addch('|');
+		(void) move(i, 0);
+		(void) addch('|');
 	}
 }
 
@@ -63,8 +63,8 @@ static void undrawPaddle(int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
-		move(i, 0);
-		addch(' ');
+		(void) move(i, 0);
+		(void) addch(' ');
 	}
 }
 
@@ -94,7 +94,7 @@ void *moveme(void* vp) {
 	drawPaddle(vpos);
 
 	while (!quit) {
-		noecho();
+		(void) noecho();
 		ch = getch();
 		switch (ch) {
 

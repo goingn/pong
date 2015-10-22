@@ -24,8 +24,10 @@
 #include "paddlectrl.h"
 #include "ballctrl.h"
 #include "timer.h"
+#include "splash.h"
 
 #define THREAD_COUNT (3)
+#define SPLASH
 
 /************************************************************************************
  * Method header:
@@ -44,42 +46,49 @@ int main(int argc, char* argv[]) {
 	int rc3;
 
 	int index;
+	pthread_t splashThread;
 	pthread_t threads[THREAD_COUNT];
 
 	// Initialize all of the variables.
 	// Global data - for inter-thread communication
 	quit = false;
 	pauseGame = false;
-
+#ifdef SPLASH
+	if ((rc1 = pthread_create(&splashThread, NULL, &splashscreen, NULL))) {
+		(void) fprintf(stderr, "Splash screen thread creation failed.");
+	}
+#endif
 	// init window - see curses documentation for guidance
 	win = initscr();
-	cbreak();
-	noecho();
-	curs_set(0);
-	keypad(win, TRUE);
-	nodelay(win, TRUE);
-	refresh();
-
+	(void) cbreak();
+	(void) noecho();
+	(void) curs_set(0);
+	(void) keypad(win, TRUE);
+	(void) nodelay(win, TRUE);
+	(void) refresh();
+#ifdef SPLASH
+	(void) pthread_join(splashThread, NULL);
+#endif
 	// Start the threads
 	if ((rc1 = pthread_create(&threads[0], NULL, &moveball, NULL))) {
-		fprintf(stderr, "Ball movement thread creation failed.");
+		(void) fprintf(stderr, "Ball movement thread creation failed.");
 	}
 	if ((rc2 = pthread_create(&threads[1], NULL, &moveme, NULL))) {
-		fprintf(stderr, "Player thread creation failed");
+		(void) fprintf(stderr, "Player thread creation failed");
 	}
 	if ((rc3 = pthread_create(&threads[2], NULL, &timer, NULL))) {
-		fprintf(stderr, "Timer thread creation failed");
+		(void) fprintf(stderr, "Timer thread creation failed");
 	}
 
 	// Wait for the threads to exit
 	for (index = 0; index < THREAD_COUNT; index++) {
-		pthread_join(threads[index], NULL);
+		(void) pthread_join(threads[index], NULL);
 	}
 
 	// tear down the window
-	delwin(win);
-	endwin();
-	refresh();
+	(void) delwin(win);
+	(void) endwin();
+	(void) refresh();
 
 	// get out of here
 	return 0;

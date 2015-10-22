@@ -69,8 +69,8 @@ void *moveball(void* vp) {
 
 	while (!quit) {
 		if (!pauseGame) {
-			move(bally, ballx);
-			addch(' ');
+			(void) move(bally, ballx);
+			(void) addch(' ');
 
 			// Figure out the movement
 			float angleInRadians = M_PI * ballAngle / 180.0;
@@ -102,13 +102,13 @@ void *moveball(void* vp) {
 
 			ballAngle = fmod(ballAngle + 360, 360.0f);
 
-			move(bally, ballx);
-			addch('O');
-			touchwin(win);
-			refresh();
+			(void) move(bally, ballx);
+			(void) addch('O');
+			(void) touchwin(win);
+			(void) refresh();
 
 			// Do not want ball to move too fast...
-			usleep(200000);
+			(void) usleep(200000);
 			// HINT: This really should be a variable, thus allowing you to speed up or slow
 			//  down play to increase / decrease level of difficulty.
 		}

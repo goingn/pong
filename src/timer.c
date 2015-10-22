@@ -17,6 +17,12 @@
 #include "pong.h"
 
 /************************************************************************************
+ * Constant declarations / table declarations
+ ***********************************************************************************/
+#define TIME_STR_SIZE 32
+#define SEC_IN_MICROSEC 1000000
+
+/************************************************************************************
  * Method header:
  * Function name: timer
  * Function purpose: This function is responsible for keeping and displaying time
@@ -34,17 +40,17 @@ void *timer(void* vp) {
 	int maxy;
 	getmaxyx(win, maxy, maxx);
 	int sec = 0;
-	char secChar[32];
+	char secChar[TIME_STR_SIZE];
 	while (!quit) {
 		if (!pauseGame) {
 			int posx = maxx / 2;
-			snprintf(secChar, 32, "%d", sec);
+			(void) snprintf(secChar, TIME_STR_SIZE, "%d", sec);
 			for(int i = 0; i < strlen(secChar); i++, posx++) {
-				move(maxy - 1, posx);
-				addch(secChar[i]);
+				(void) move(maxy - 1, posx);
+				(void) addch(secChar[i]);
 			}
-			addch('s');
-			usleep(1000000);
+			(void) addch('s');
+			(void) usleep(SEC_IN_MICROSEC);
 			sec++;
 		}
 	}
