@@ -50,6 +50,7 @@ void *timer(void* vp) {
 				(void) addch(secChar[i]);
 			}
 			(void) addch('s');
+			(void) refresh();
 			(void) usleep(SEC_IN_MICROSEC);
 			sec++;
 		}

@@ -37,7 +37,6 @@ void *splashscreen(void* vp) {
 	int maxx;
 	int maxy;
 	getmaxyx(win, maxy, maxx);
-	printf("HERE 1: maxx: %d, maxy: %d", maxx, maxy);
 	char* gameName = "Pong";
 	char* author1 = "Noah Going";
 	char* author2 = "Noel Mrowiec";

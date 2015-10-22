@@ -19,6 +19,7 @@
 #include <curses.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "pong.h"
 #include "paddlectrl.h"
@@ -28,6 +29,8 @@
 
 #define THREAD_COUNT (3)
 //#define SPLASH
+
+static void displayNames(char* name1, char* name2);
 
 /************************************************************************************
  * Method header:
@@ -46,7 +49,6 @@ int main(int argc, char* argv[]) {
 	int rc3;
 
 	int index;
-	pthread_t splashThread;
 	pthread_t threads[THREAD_COUNT];
 
 	// Initialize all of the variables.
@@ -54,6 +56,7 @@ int main(int argc, char* argv[]) {
 	quit = false;
 	pauseGame = false;
 #ifdef SPLASH
+	pthread_t splashThread;
 	if ((rc1 = pthread_create(&splashThread, NULL, &splashscreen, NULL))) {
 		(void) fprintf(stderr, "Splash screen thread creation failed.");
 	}
@@ -69,6 +72,9 @@ int main(int argc, char* argv[]) {
 #ifdef SPLASH
 	(void) pthread_join(splashThread, NULL);
 #endif
+	if (argc >= 3 && argv[1] != NULL && argv[2] != NULL) {
+		displayNames(argv[1], argv[2]);
+	}
 	// Start the threads
 	if ((rc1 = pthread_create(&threads[0], NULL, &moveball, NULL))) {
 		(void) fprintf(stderr, "Ball movement thread creation failed.");
@@ -92,4 +98,26 @@ int main(int argc, char* argv[]) {
 
 	// get out of here
 	return 0;
+}
+
+void displayNames(char* name1, char* name2) {
+	int maxx;
+	int maxy;
+	getmaxyx(win, maxy, maxx);
+	float posx = 0.0f;
+	if (strlen(name1) <= 16) {
+		posx = maxx * ((float) 1 / 3) - 8;
+		for (int i = 0; i < strlen(name1); i++, posx++) {
+			(void) move(maxy - 1, posx);
+			(void) addch(name1[i]);
+		}
+	}
+	if (strlen(name2) <= 16) {
+		posx = maxx * ((float) 2 / 3) + 8;
+		for (int i = 0; i < strlen(name2); i++, posx++) {
+			(void) move(maxy - 1, posx);
+			(void) addch(name2[i]);
+		}
+	}
+	(void) refresh();
 }
