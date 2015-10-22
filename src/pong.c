@@ -27,7 +27,7 @@
 #include "splash.h"
 
 #define THREAD_COUNT (3)
-#define SPLASH
+//#define SPLASH
 
 /************************************************************************************
  * Method header:
