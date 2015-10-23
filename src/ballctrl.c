@@ -32,7 +32,7 @@ static void collision();
  * Constant declarations / table declarations
  ***********************************************************************************/
 #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 #endif
 static int ballx;
 static int bally;
@@ -70,7 +70,9 @@ void *moveball(void* vp) {
 	while (!quit) {
 		if (!pauseGame) {
 			(void) move(bally, ballx);
-			(void) addch(' ');
+			if (inch() == 'O') {
+				(void) addch(' ');
+			}
 
 			// Figure out the movement
 			float angleInRadians = M_PI * ballAngle / 180.0;
@@ -103,7 +105,9 @@ void *moveball(void* vp) {
 			ballAngle = fmod(ballAngle + 360, 360.0f);
 
 			(void) move(bally, ballx);
-			(void) addch('O');
+			if (inch() == ' ') {
+				(void) addch('O');
+			}
 			(void) touchwin(win);
 			(void) refresh();
 
