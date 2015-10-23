@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 #ifdef SPLASH
 	(void) pthread_join(splashThread, NULL);
 #endif
-	if (argc >= 3 && argv[1] != NULL && argv[2] != NULL) {
+	if (argc >= 2 && argv[1] != NULL) {
 		displayNames(argv[1], argv[2]);
 	}
 	// Start the threads
@@ -107,18 +107,18 @@ void displayNames(char* name1, char* name2) {
 	getmaxyx(win, maxy, maxx);
 	float posx = 0.0f;
 	int limit1 = strlen(name1) > 16 ? 16 : strlen(name1);
-	int limit2 = strlen(name2) > 16 ? 16 : strlen(name2);
-
 	posx = ((maxx * ((float) 1 / 3)) - 8) - (ceil((float) limit1 / 2) - 1);
 	for (int i = 0; i < limit1; i++, posx++) {
 		(void) move(maxy - 1, posx);
 		(void) addch(name1[i]);
 	}
-	posx = ((maxx * ((float) 2 / 3)) + 8) - (ceil((float) limit2 / 2) - 1);
-	for (int i = 0; i < limit2; i++, posx++) {
-		(void) move(maxy - 1, posx);
-		(void) addch(name2[i]);
+	if (name2 != NULL) {
+		int limit2 = strlen(name2) > 16 ? 16 : strlen(name2);
+		posx = ((maxx * ((float) 2 / 3)) + 8) - (ceil((float) limit2 / 2) - 1);
+		for (int i = 0; i < limit2; i++, posx++) {
+			(void) move(maxy - 1, posx);
+			(void) addch(name2[i]);
+		}
 	}
-
 	(void) refresh();
 }
