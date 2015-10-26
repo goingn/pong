@@ -35,6 +35,8 @@
 EXTERN_PFX WINDOW *win;	// the curses window
 EXTERN_PFX bool quit;  // a flag to stop all threads
 EXTERN_PFX bool pauseGame; // a flag to pause all threads
+EXTERN_PFX int ballx;
+EXTERN_PFX int bally;
 
 /************************************************************************************
  * Public function / method prototypes

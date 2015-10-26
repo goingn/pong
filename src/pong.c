@@ -27,6 +27,7 @@
 #include "ballctrl.h"
 #include "timer.h"
 #include "splash.h"
+#include "opponent.h"
 
 #define THREAD_COUNT (3)
 //#define SPLASH
@@ -48,6 +49,7 @@ int main(int argc, char* argv[]) {
 	int rc1;
 	int rc2;
 	int rc3;
+	int rc4;
 
 	int index;
 	pthread_t threads[THREAD_COUNT];
@@ -56,6 +58,7 @@ int main(int argc, char* argv[]) {
 	// Global data - for inter-thread communication
 	quit = false;
 	pauseGame = false;
+
 #ifdef SPLASH
 	pthread_t splashThread;
 	if ((rc1 = pthread_create(&splashThread, NULL, &splashscreen, NULL))) {
@@ -85,6 +88,9 @@ int main(int argc, char* argv[]) {
 	}
 	if ((rc3 = pthread_create(&threads[2], NULL, &timer, NULL))) {
 		(void) fprintf(stderr, "Timer thread creation failed");
+	}
+	if ((rc4 = pthread_create(&threads[3], NULL, &moveopponent, NULL))) {
+		(void) fprintf(stderr, "Move opponent thread creation failed");
 	}
 
 	// Wait for the threads to exit

@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/ballctrl.c \
+../src/opponent.c \
 ../src/paddlectrl.c \
 ../src/pong.c \
 ../src/splash.c \
@@ -12,6 +13,7 @@ C_SRCS += \
 
 OBJS += \
 ./src/ballctrl.o \
+./src/opponent.o \
 ./src/paddlectrl.o \
 ./src/pong.o \
 ./src/splash.o \
@@ -19,6 +21,7 @@ OBJS += \
 
 C_DEPS += \
 ./src/ballctrl.d \
+./src/opponent.d \
 ./src/paddlectrl.d \
 ./src/pong.d \
 ./src/splash.d \
