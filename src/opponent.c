@@ -93,33 +93,41 @@ void *moveopponent(void* vp) {
 	drawPaddle(maxx, vpos);
 
 	while (!quit) {
-
 		//find the difference of the ball from the old position
 		int yPositionChange = bally - vpos;
 		int i;
 
 		if(yPositionChange > 0){
+			//move down
 			if (!pauseGame) {
-				for(i = 0; i < yPositionChange; i++){
-					undrawPaddle(maxx, vpos);
-					vpos++;
-					if (vpos > (maxy - (PADDLE_SIZE / 2))) {
-						vpos = (maxy - (PADDLE_SIZE / 2));
+				//only move paddle if not at the bottom of the screen
+				if(bally <= maxy - PADDLE_SIZE/2){
+					for(i = 0; i < yPositionChange; i++){
+						undrawPaddle(maxx, vpos);
+						vpos++;
+						if (vpos > (maxy - (PADDLE_SIZE / 2))) {
+							vpos = (maxy - (PADDLE_SIZE / 2));
+						}
+						drawPaddle(maxx, vpos);
 					}
-					drawPaddle(maxx, vpos);
 				}
 			}
 
 		}
 		else if(yPositionChange < 0){
+			//move up
 			if (!pauseGame) {
-				for(i = 0; i < yPositionChange; i++){
-					undrawPaddle(maxx, vpos);
-					vpos--;
-					if (vpos < 0 + PADDLE_SIZE / 2) {
-						vpos = PADDLE_SIZE / 2;
+				//only move paddle if not at the top of the screen
+				if(bally >= PADDLE_SIZE/2){
+					yPositionChange *= -1; //make positive value
+					for(i = 0; i < yPositionChange; i++){
+						undrawPaddle(maxx, vpos);
+						vpos--;
+						if (vpos < 0 + PADDLE_SIZE / 2) {
+							vpos = PADDLE_SIZE / 2;
+						}
+						drawPaddle(maxx, vpos);
 					}
-					drawPaddle(maxx, vpos);
 				}
 			}
 		}
