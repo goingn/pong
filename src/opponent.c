@@ -30,7 +30,7 @@ static void undrawPaddle(int maxx,int center);
 /************************************************************************************
  * Constant declarations / table declarations
  ***********************************************************************************/
-static int oldBally;
+
 
 /************************************************************************************
  * Method header:
@@ -82,7 +82,6 @@ static void undrawPaddle(int maxx, int center) {
  ************************************************************************************/
 // Run the computer's paddle
 void *moveopponent(void* vp) {
-	int ch;
 
 	// get the extents of the screen
 	int maxx;
@@ -93,45 +92,40 @@ void *moveopponent(void* vp) {
 	// draw the default paddle
 	drawPaddle(maxx, vpos);
 
-	//find the difference of the ball from the old position
-	int yPositionChange = bally - oldBally;
-
-	if(yPositionChange > 0){
-
-	}
-	else if(yPositionChange < 0){
-
-	}
-	else{
-
-	}
-
-
-
 	while (!quit) {
 
-		case KEY_UP: // The user has pressed the up arrow.  Move the paddle one pixel upwards if possible.
-			if (!pauseGame) {
-				undrawPaddle(maxx, vpos);
-				vpos--;
-				if (vpos < 0 + PADDLE_SIZE / 2) {
-					vpos = PADDLE_SIZE / 2;
-				}
-				drawPaddle(maxx, vpos);
-			}
-			break;
+		//find the difference of the ball from the old position
+		int yPositionChange = bally - vpos;
+		int i;
 
-		case KEY_DOWN: // The user has pressed the down arrow.  Move the paddle one pixel downward if possible.
+		if(yPositionChange > 0){
 			if (!pauseGame) {
-				undrawPaddle(maxx, vpos);
-				vpos++;
-				if (vpos > (maxy - (PADDLE_SIZE / 2))) {
-					vpos = (maxy - (PADDLE_SIZE / 2));
+				for(i = 0; i < yPositionChange; i++){
+					undrawPaddle(maxx, vpos);
+					vpos++;
+					if (vpos > (maxy - (PADDLE_SIZE / 2))) {
+						vpos = (maxy - (PADDLE_SIZE / 2));
+					}
+					drawPaddle(maxx, vpos);
 				}
-				drawPaddle(maxx, vpos);
 			}
-			break;
 
+		}
+		else if(yPositionChange < 0){
+			if (!pauseGame) {
+				for(i = 0; i < yPositionChange; i++){
+					undrawPaddle(maxx, vpos);
+					vpos--;
+					if (vpos < 0 + PADDLE_SIZE / 2) {
+						vpos = PADDLE_SIZE / 2;
+					}
+					drawPaddle(maxx, vpos);
+				}
+			}
+		}
+		else{
+			//do nothing
+		}
 	}
 	return NULL;
 }
