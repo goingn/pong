@@ -130,17 +130,17 @@ void *moveme(void* vp) {
 			pauseGame = !pauseGame;
 			break;
 		case '+': // The user pressed the plus key to increase the speed of ball
-			//pthread_mutex_lock(&mutex);
-			usleep(0); //filler
+			pthread_mutex_lock(&mutex);
+			//usleep(0); //filler
 			int temp = ballMovementDelay / 2;
 			if(temp > 0)
 				ballMovementDelay = temp;
-			//pthread_mutex_unlock(&mutex);
+			pthread_mutex_unlock(&mutex);
 			break;
 		case '-': // The user pressed the minus key to decrease the speed of ball
-			//pthread_mutex_lock(&mutex);
+			pthread_mutex_lock(&mutex);
 			ballMovementDelay *= 2;
-			//pthread_mutex_unlock(&mutex);
+			pthread_mutex_unlock(&mutex);
 			break;
 		default:
 			break;
