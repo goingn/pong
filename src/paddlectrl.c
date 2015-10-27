@@ -131,7 +131,6 @@ void *moveme(void* vp) {
 			break;
 		case '+': // The user pressed the plus key to increase the speed of ball
 			pthread_mutex_lock(&mutex);
-			//usleep(0); //filler
 			int temp = ballMovementDelay / 2;
 			if(temp > 0)
 				ballMovementDelay = temp;

@@ -109,12 +109,14 @@ void *moveball(void* vp) {
 			(void) touchwin(win);
 			(void) refresh();
 
-			// Do not want ball to move too fast...
-			//pthread_mutex_lock(&mutex);
-			(void) usleep(ballMovementDelay);
-			//pthread_mutex_unlock(&mutex);
-			// HINT: This really should be a variable, thus allowing you to speed up or slow
-			//  down play to increase / decrease level of difficulty.
+			//pass ballMovementDelay to local variable so we can mutex lock/
+			//unlock access of ballMovementDelay and not wait for delay to finish.
+
+			pthread_mutex_lock(&mutex);
+			int delayLocalCopy = ballMovementDelay;
+			pthread_mutex_unlock(&mutex);
+
+			(void) usleep(delayLocalCopy);
 		}
 	}
 	return NULL;
