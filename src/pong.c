@@ -15,7 +15,6 @@
 /************************************************************************************
  * External Includes
  ************************************************************************************/
-#include <pthread.h>
 #include <curses.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -29,7 +28,8 @@
 #include "splash.h"
 #include "opponent.h"
 
-#define THREAD_COUNT (3)
+#define THREAD_COUNT (4)
+#define INITIAL_BALL_MOVEMENT_DELAY (200000)
 //#define SPLASH
 
 static void displayNames(char* name1, char* name2);
@@ -58,6 +58,14 @@ int main(int argc, char* argv[]) {
 	// Global data - for inter-thread communication
 	quit = false;
 	pauseGame = false;
+	ballMovementDelay = INITIAL_BALL_MOVEMENT_DELAY;
+
+	//set up mutex for locking
+	if (pthread_mutex_init(&mutex, NULL) != 0)
+	{
+		printf("\n mutex init failed\n");
+		return 1;
+	}
 
 #ifdef SPLASH
 	pthread_t splashThread;
@@ -102,6 +110,8 @@ int main(int argc, char* argv[]) {
 	(void) delwin(win);
 	(void) endwin();
 	(void) refresh();
+
+	pthread_mutex_destroy(&mutex);
 
 	// get out of here
 	return 0;

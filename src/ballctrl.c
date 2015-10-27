@@ -110,7 +110,9 @@ void *moveball(void* vp) {
 			(void) refresh();
 
 			// Do not want ball to move too fast...
-			(void) usleep(200000);
+			//pthread_mutex_lock(&mutex);
+			(void) usleep(ballMovementDelay);
+			//pthread_mutex_unlock(&mutex);
 			// HINT: This really should be a variable, thus allowing you to speed up or slow
 			//  down play to increase / decrease level of difficulty.
 		}

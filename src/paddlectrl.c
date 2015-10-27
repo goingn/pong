@@ -73,6 +73,9 @@ static void undrawPaddle(int center) {
  * Function name: moveme
  * Function purpose: This function is responsible for moving the users paddle.
  *                   It is spawned as a thread and ewill exit if and when quit is no longer true.
+ *                   Also, allow the user to increase/decrease the ball speed.
+ * 					 The '+' key increases the ball speed, the '-' decreases the
+ * 					 ball speed.
  * Function parameters: 
  *                   void *vp - This is a pointer to the parameters passed into the 
  *                              thread.  At the present time, this parameter is not used.
@@ -125,6 +128,19 @@ void *moveme(void* vp) {
 			break;
 		case 'p':
 			pauseGame = !pauseGame;
+			break;
+		case '+': // The user pressed the plus key to increase the speed of ball
+			//pthread_mutex_lock(&mutex);
+			usleep(0); //filler
+			int temp = ballMovementDelay / 2;
+			if(temp > 0)
+				ballMovementDelay = temp;
+			//pthread_mutex_unlock(&mutex);
+			break;
+		case '-': // The user pressed the minus key to decrease the speed of ball
+			//pthread_mutex_lock(&mutex);
+			ballMovementDelay *= 2;
+			//pthread_mutex_unlock(&mutex);
 			break;
 		default:
 			break;

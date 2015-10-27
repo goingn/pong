@@ -23,6 +23,7 @@
  ************************************************************************************/
 #include <curses.h>
 #include <stdbool.h>
+#include <pthread.h>
 
 /************************************************************************************
  * Public structure / type definitions
@@ -35,8 +36,11 @@
 EXTERN_PFX WINDOW *win;	// the curses window
 EXTERN_PFX bool quit;  // a flag to stop all threads
 EXTERN_PFX bool pauseGame; // a flag to pause all threads
-EXTERN_PFX int ballx;
-EXTERN_PFX int bally;
+EXTERN_PFX int ballx; // ball's x position
+EXTERN_PFX int bally; // ball's y position
+EXTERN_PFX pthread_mutex_t mutex; // mutex for locking variables
+EXTERN_PFX int ballMovementDelay; // delay value for speed of ball. Lower value is
+								  // a faster ball speed
 
 /************************************************************************************
  * Public function / method prototypes
