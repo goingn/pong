@@ -34,7 +34,7 @@
  *                              Currently, it is always NULL, as no data is directly
  *                              returned by the thread.
  ************************************************************************************/
-// This thread is responsible for moving the ball
+// This thread is the total time timer
 void *timer(void* vp) {
 	int maxx;
 	int maxy;
@@ -45,11 +45,13 @@ void *timer(void* vp) {
 		if (!pauseGame) {
 			int posx = maxx / 2;
 			(void) snprintf(secChar, TIME_STR_SIZE, "%d", sec);
+			pthread_mutex_lock(&mutex);
 			for(int i = 0; i < strlen(secChar); i++, posx++) {
 				(void) move(maxy - 1, posx);
 				(void) addch(secChar[i]);
 			}
 			(void) addch('s');
+			pthread_mutex_unlock(&mutex);
 			(void) refresh();
 			(void) usleep(SEC_IN_MICROSEC);
 			sec++;

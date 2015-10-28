@@ -16,6 +16,7 @@
  ************************************************************************************/
 #include <unistd.h>
 #include <math.h>
+#include <string.h>
 #include "ballctrl.h"
 #include "pong.h"
 
@@ -27,6 +28,7 @@
  * Private function / method prototypes
  ************************************************************************************/
 static void collision();
+static void checkForScore(int maxx, int maxy);
 
 /************************************************************************************
  * Constant declarations / table declarations
@@ -35,12 +37,15 @@ static void collision();
 #define M_PI 3.14159265358979323846
 #endif
 static float ballAngle;
-
+static bool flashBall = false;
+static int score;
+#define MAX_SCORE_CHARS (32)
 /************************************************************************************
  * Method header:
  * Function name: moveball
  * Function purpose: This function is responsible for moving the ball within the game of pong.
  *                   It is spawned as a thread and will exit if and when quit is no longer true.
+ *                   Ball will flash (display '*') on collision.
  * Function parameters: 
  *                   void *vp - This is a pointer to the parameters passed into the 
  *                              thread.  At the present time, this parameter is not used.
@@ -68,8 +73,10 @@ void *moveball(void* vp) {
 	while (!quit) {
 		if (!pauseGame) {
 			(void) move(bally, ballx);
-			if (inch() == 'O') {
+			if (inch() == 'O' || inch() == '*') {
+				pthread_mutex_lock(&mutex);
 				(void) addch(' ');
+				pthread_mutex_unlock(&mutex);
 			}
 
 			// Figure out the movement
@@ -87,27 +94,45 @@ void *moveball(void* vp) {
 				ballAngle = 360 - ballAngle;
 				collision();
 			}
-			if (bally < 1) {
+			else if (bally < 1) {
 				ballAngle = 360 - ballAngle;
 				collision();
 			}
-			if (ballx >= maxx - 1) {
+			else if (ballx >= maxx - 1) {
 				ballAngle = 180 - ballAngle;
 				collision();
 			}
-			if (ballx < 1) {
+			else if (ballx < 1) {
 				ballAngle = 180 - ballAngle;
 				collision();
+			}
+			else{
+				flashBall = false;
 			}
 
 			ballAngle = fmod(ballAngle + 360, 360.0f);
 
-			(void) move(bally, ballx);
-			if (inch() == ' ') {
-				(void) addch('O');
+			checkForScore(maxx, maxy);
+
+			if(!flashBall){
+				if (inch() == ' ') {
+					pthread_mutex_lock(&mutex);
+					(void) move(bally, ballx);
+					(void) addch('O');		//regular ball, no collision
+					pthread_mutex_unlock(&mutex);
+				}
+			}
+			else if(flashBall){
+				if(inch() != '|'){
+					pthread_mutex_lock(&mutex);
+					(void) move(bally, ballx);
+					(void) addch('*');		//flash ball on collision
+					pthread_mutex_unlock(&mutex);
+				}
 			}
 			(void) touchwin(win);
 			(void) refresh();
+
 
 			//pass ballMovementDelay to local variable so we can mutex lock/
 			//unlock access of ballMovementDelay and not wait for delay to finish.
@@ -132,5 +157,45 @@ void *moveball(void* vp) {
  ************************************************************************************/
 // collision sound effects
 static void collision() {
+	flashBall = true;
 	return;
+}
+
+/************************************************************************************
+ * Method header:
+ * Function name: checkForScore
+ * Function purpose: This method will check to see if the ball has hit the left
+ * 					 side of the screen. If so, increment the score. Note:
+ * 					 score is the number of times the player has missed the ball.
+ * Function parameters:
+ *                   None
+ * Function return value: None
+ ************************************************************************************/
+//checks score
+void checkForScore(int maxx, int maxy){
+	pthread_mutex_lock(&mutex);
+	(void) move(bally, ballx);
+	pthread_mutex_unlock(&mutex);
+	//check if ball has hit the left side of the screen and no paddle
+	if(ballx == 0 && inch() == ' '){
+		//hit the left side of screen with no paddle,
+		//so increment score and print top center.
+		score++;
+
+		char scoreString[MAX_SCORE_CHARS] = "Score: ";
+		char scoreCharNum[MAX_SCORE_CHARS];
+		(void) snprintf(scoreCharNum, MAX_SCORE_CHARS, "%d", score);
+		strcat(scoreString, scoreCharNum);
+
+		int posx = maxx / 2;
+
+		for(int i = 0; i < strlen(scoreString); i++, posx++) {
+			pthread_mutex_lock(&mutex);
+			(void) move(0, posx);
+			(void) addch(scoreString[i]);
+			pthread_mutex_unlock(&mutex);
+		}
+
+		(void) refresh();
+	}
 }

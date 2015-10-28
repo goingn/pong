@@ -45,8 +45,10 @@ static void drawPaddle(int maxx, int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
+		pthread_mutex_lock(&mutex);
 		(void) move(i, maxx-1);
 		(void) addch('|');
+		pthread_mutex_unlock(&mutex);
 	}
 }
 
@@ -63,8 +65,10 @@ static void undrawPaddle(int maxx, int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
+		pthread_mutex_lock(&mutex);
 		(void) move(i, maxx-1);
 		(void) addch(' ');
+		pthread_mutex_unlock(&mutex);
 	}
 }
 
