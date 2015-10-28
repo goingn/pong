@@ -123,7 +123,7 @@ void *moveball(void* vp) {
 				}
 			}
 			else if(flashBall){
-				if(inch() != '|'){
+				if(inch() == ' '){
 					pthread_mutex_lock(&mutex);
 					(void) move(bally, ballx);
 					(void) addch('*');		//flash ball on collision
