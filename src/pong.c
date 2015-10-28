@@ -30,7 +30,7 @@
 
 #define THREAD_COUNT (4)
 #define INITIAL_BALL_MOVEMENT_DELAY (200000)
-//#define SPLASH
+#define SPLASH
 
 static void displayNames(char* name1, char* name2);
 
@@ -67,12 +67,6 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-#ifdef SPLASH
-	pthread_t splashThread;
-	if ((rc1 = pthread_create(&splashThread, NULL, &splashscreen, NULL))) {
-		(void) fprintf(stderr, "Splash screen thread creation failed.");
-	}
-#endif
 	// init window - see curses documentation for guidance
 	win = initscr();
 	(void) cbreak();
@@ -81,9 +75,15 @@ int main(int argc, char* argv[]) {
 	(void) keypad(win, TRUE);
 	(void) nodelay(win, TRUE);
 	(void) refresh();
+
 #ifdef SPLASH
+	pthread_t splashThread;
+	if ((rc1 = pthread_create(&splashThread, NULL, &splashscreen, NULL))) {
+		(void) fprintf(stderr, "Splash screen thread creation failed.");
+	}
 	(void) pthread_join(splashThread, NULL);
 #endif
+
 	if (argc >= 2 && argv[1] != NULL) {
 		displayNames(argv[1], argv[2]);
 	}
